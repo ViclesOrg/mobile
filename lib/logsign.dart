@@ -91,6 +91,7 @@ class _LogsigbState extends State<Logsign> {
                             labelStyle: const TextStyle(
                               fontFamily: 'Montserrat',
                               color: Color.fromARGB(255, 0, 0, 0),
+                              fontWeight: FontWeight.bold
                             ),
                             prefixIcon: const RemixIcon(icon: 0xEA83),
                             border: const OutlineInputBorder(),
@@ -108,7 +109,11 @@ class _LogsigbState extends State<Logsign> {
                               color: Colors.red,
                             ),
                           ),
-                          style: const TextStyle(fontFamily: 'Montserrat'),
+                          style: const TextStyle(
+                              fontFamily: 'Montserrat',
+                              color: Color.fromARGB(255, 0, 0, 0),
+                              fontWeight: FontWeight.bold
+                          ),
                           keyboardType: TextInputType.emailAddress,
                           onChanged: (_) {
                             if (_emailError != null) {
@@ -126,6 +131,7 @@ class _LogsigbState extends State<Logsign> {
                             labelStyle: const TextStyle(
                               fontFamily: 'Montserrat',
                               color: Color.fromARGB(255, 0, 0, 0),
+                              fontWeight: FontWeight.bold
                             ),
                             prefixIcon: const RemixIcon(icon: 0xEED0),
                             border: const OutlineInputBorder(),
@@ -143,7 +149,11 @@ class _LogsigbState extends State<Logsign> {
                               color: Colors.red,
                             ),
                           ),
-                          style: const TextStyle(fontFamily: 'Montserrat'),
+                          style: const TextStyle(
+                              fontFamily: 'Montserrat',
+                              color: Color.fromARGB(255, 0, 0, 0),
+                              fontWeight: FontWeight.bold
+                          ),
                           obscureText: true,
                           onChanged: (_) {
                             if (_passwordError != null) {
@@ -172,7 +182,7 @@ class _LogsigbState extends State<Logsign> {
                               style: TextStyle(
                                 fontSize: 18,
                                 fontFamily: 'Montserrat',
-                                fontWeight: FontWeight.w600,
+                                fontWeight: FontWeight.bold
                               ),
                             ),
                           ),
@@ -205,6 +215,7 @@ class _LogsigbState extends State<Logsign> {
                     color: Color.fromARGB(255, 0, 0, 0),
                     fontSize: 12,
                     fontFamily: 'Montserrat',
+                    fontWeight: FontWeight.bold
                   ),
                 ),
               ),

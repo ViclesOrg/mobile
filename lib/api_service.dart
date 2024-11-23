@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class ApiService {
-  static const String baseUrl = 'https://api.example.com'; // Replace with your API base URL
+  static const String baseUrl = 'http://localhost:3000';
   
   // GET Request with query parameters
   static Future<dynamic> get(
