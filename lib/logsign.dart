@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:vicles/remix_icon.dart';
 
 class Logsign extends StatefulWidget {
   const Logsign({super.key});
@@ -91,10 +92,7 @@ class _LogsigbState extends State<Logsign> {
                               fontFamily: 'Montserrat',
                               color: Color.fromARGB(255, 0, 0, 0),
                             ),
-                            prefixIcon: const Icon(
-                              Icons.email,
-                              color: Colors.black,
-                            ),
+                            prefixIcon: const RemixIcon(icon: 0xEA83),
                             border: const OutlineInputBorder(),
                             enabledBorder: OutlineInputBorder(
                               borderSide: BorderSide(color: Colors.grey[300]!),
@@ -129,10 +127,7 @@ class _LogsigbState extends State<Logsign> {
                               fontFamily: 'Montserrat',
                               color: Color.fromARGB(255, 0, 0, 0),
                             ),
-                            prefixIcon: const Icon(
-                              Icons.lock,
-                              color: Colors.black,
-                            ),
+                            prefixIcon: const RemixIcon(icon: 0xEED0),
                             border: const OutlineInputBorder(),
                             enabledBorder: OutlineInputBorder(
                               borderSide: BorderSide(color: Colors.grey[300]!),
