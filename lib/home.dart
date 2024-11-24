@@ -11,14 +11,16 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   String? _retrievedUser;
-  dynamic _user;
+  String? _user;
+  String? _id;
 
   Future<void> _retrieveUser() async {
     String? token = await getValue("user");
     setState(() {
       _retrievedUser = token ?? "No token found!";
       if (_retrievedUser != "No token found!") {
-        _user = jsonDecode(_retrievedUser.toString());
+        _user = jsonDecode(_retrievedUser.toString())['user']['name'];
+        _id = jsonDecode(_retrievedUser.toString())['user']['id'];
       }
     });
   }
@@ -31,13 +33,14 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    String name = _user['user']['name'];
+    _retrieveUser();
+
     return Scaffold(
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text('Welcome $name',
+            Text('Welcome $_user and id is $_id',
                 style: const TextStyle(
                     fontFamily: "Montserrat",
                     fontWeight: FontWeight.bold,
