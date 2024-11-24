@@ -6,7 +6,7 @@ class ApiService {
   
   // GET Request with query parameters
   static Future<dynamic> get(
-    String endpoint, {
+    String endpoint, Map<String, String> map, {
     Map<String, dynamic>? queryParams,
   }) async {
     try {
@@ -32,18 +32,19 @@ class ApiService {
     }
   }
   
-  // POST Request
+  // POST Request with FormData
   static Future<dynamic> post(String endpoint, Map<String, dynamic> body) async {
     try {
-      final response = await http.post(
-        Uri.parse('$baseUrl/$endpoint'),
-        headers: {
-          'Content-Type': 'application/json',
-          // Add any additional headers here
-          // 'Authorization': 'Bearer $token',
-        },
-        body: jsonEncode(body),
-      );
+      var request = http.MultipartRequest('POST', Uri.parse('$baseUrl/$endpoint'));
+      
+      // Add form fields from the body map
+      body.forEach((key, value) {
+        request.fields[key] = value.toString();
+      });
+      
+      // Send the request
+      final streamedResponse = await request.send();
+      final response = await http.Response.fromStream(streamedResponse);
       
       return _handleResponse(response);
     } catch (e) {
