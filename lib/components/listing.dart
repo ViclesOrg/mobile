@@ -50,51 +50,88 @@ class _MyListingPageState extends State<MyListingPage> {
   List<Widget> carsFactory(List<dynamic> cars) {
     List<Widget> widgets = [];
     for (var car in cars) {
-      Card c = Card(
-          elevation: 2,
-          surfaceTintColor: Colors.white,
-          color: Color.fromARGB(255, 255, 248, 242),
-          child: Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Text(car["cbrand"] + ' ' + car["cmodel"]),
-          ));
-      widgets.add(c);
+      Card card = Card(
+        color: Colors.white,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8.0),
+          side: const BorderSide(
+            color: Colors.grey,
+            width: .2,
+          ),
+        ),
+        elevation: 3,
+        child: SizedBox(
+          height: 100, // Match the image height
+          child: Row(
+            children: [
+              // Image on the left
+              ClipRRect(
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(8.0),
+                  bottomLeft: Radius.circular(8.0),
+                ),
+                child: Image.network(
+                  car["cover"],
+                  width: 100,
+                  height: 100,
+                  fit: BoxFit.cover,
+                ),
+              ),
+              // Details on the right
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        '${car["cbrand"]} ${car["cmodel"]}',
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontFamily: "Montserrat",
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+
+      widgets.add(card);
+
+      // Add spacing between cards
       if (car != cars.last) {
-        widgets.add(SizedBox(
-          height: 10,
-        ));
+        widgets.add(const SizedBox(height: 10));
       }
     }
     return widgets;
   }
 
-  List<Widget> handleLoading() {
+  Widget handleLoading() {
     if (_isLoading) {
-      return [
-        Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Container(
-                color: Colors.white,
-                child: const Center(
-                  child: CircularProgressIndicator(
-                    color: Color.fromARGB(255, 253, 111, 0),
-                  ),
-                ),
-              ),
-            ]),
-      ];
+      return Container(
+        color: Colors.white,
+        child: const Center(
+          child: CircularProgressIndicator(
+            color: Color.fromARGB(255, 253, 111, 0),
+          ),
+        ),
+      );
     } else if (_cars.isNotEmpty) {
-      return carsFactory(_cars);
+      return ListView(
+        children: carsFactory(_cars),
+      );
     }
-    return [
-      Text('Aucun résultat',
-          style: const TextStyle(
-              fontFamily: "Montserrat",
-              fontWeight: FontWeight.bold,
-              fontSize: 20))
-    ];
+    return Text('Aucun résultat',
+        style: const TextStyle(
+            fontFamily: "Montserrat",
+            fontWeight: FontWeight.bold,
+            fontSize: 20));
   }
 
   @override
@@ -104,7 +141,7 @@ class _MyListingPageState extends State<MyListingPage> {
         body: Center(
           child: Padding(
             padding: const EdgeInsets.all(15.0),
-            child: ListView(children: handleLoading()),
+            child: handleLoading(),
           ),
         ));
   }
