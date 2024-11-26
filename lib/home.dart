@@ -50,12 +50,12 @@ class _MyHomePageState extends State<MyHomePage> {
             onPressed: () {
               print("Location");
             },
-            child: RemixIcon(icon: 0xEF0A)),
+            child: RemixIcon(icon: 0xEF0A, size: 24)),
         TextButton(
             onPressed: () {
               print("Filter");
             },
-            child: RemixIcon(icon: 0xED27))
+            child: RemixIcon(icon: 0xED27, size: 24))
       ];
     }
     return [
@@ -83,40 +83,52 @@ class _MyHomePageState extends State<MyHomePage> {
               children: _conditionalRender(),
             ),
           )),
-      bottomNavigationBar: NavigationBar(
-        destinations: const <Widget>[
-          NavigationDestination(
-            icon: RemixIcon(icon: 0xEE19),
-            label: "Acceuil",
-            selectedIcon: RemixIcon(
-              icon: 0xEE19,
-              color: Colors.white,
+      bottomNavigationBar: Container(
+        decoration: const BoxDecoration(
+          border: Border(
+            top: BorderSide(
+              color: Colors.grey, // Border color
+              width: 0.5, // Border width
             ),
           ),
-          NavigationDestination(
+        ),
+        child: NavigationBar(
+          destinations: const <Widget>[
+            NavigationDestination(
+              icon: RemixIcon(icon: 0xEE19),
+              label: "Acceuil",
+              selectedIcon: RemixIcon(
+                icon: 0xEE19,
+                color: Colors.white,
+              ),
+            ),
+            NavigationDestination(
               icon: RemixIcon(icon: 0xEF94),
               label: "Notification",
               selectedIcon: RemixIcon(
                 icon: 0xEF94,
                 color: Colors.white,
-              )),
-          NavigationDestination(
+              ),
+            ),
+            NavigationDestination(
               icon: RemixIcon(icon: 0xF25C),
               label: "Profile",
               selectedIcon: RemixIcon(
                 icon: 0xF25C,
                 color: Colors.white,
-              ))
-        ],
-        animationDuration: Duration(seconds: 2),
-        selectedIndex: currentPageIndex,
-        indicatorColor: Color.fromARGB(255, 253, 111, 0),
-        backgroundColor: Colors.white60,
-        onDestinationSelected: (int index) {
-          setState(() {
-            currentPageIndex = index;
-          });
-        },
+              ),
+            )
+          ],
+          animationDuration: Duration(seconds: 2),
+          selectedIndex: currentPageIndex,
+          indicatorColor: Color.fromARGB(255, 253, 111, 0),
+          backgroundColor: Colors.white,
+          onDestinationSelected: (int index) {
+            setState(() {
+              currentPageIndex = index;
+            });
+          },
+        ),
       ),
       body: <Widget>[
         MyListingPage(),

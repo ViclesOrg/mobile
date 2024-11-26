@@ -60,6 +60,7 @@ class _LogsigbState extends State<Logsign> {
             return const Center(
               child: CircularProgressIndicator(
                 color: Color.fromARGB(255, 253, 111, 0),
+                backgroundColor: Colors.white,
               ),
             );
           },
@@ -75,7 +76,7 @@ class _LogsigbState extends State<Logsign> {
         // Hide loading indicator
         Navigator.of(context).pop();
 
-        if (response != null && response['error']['code'] != 2) {
+        if (response != null && response['error']['code'] == 0) {
           // Handle successful login
           // You might want to store the token or user data here
           // For example:
