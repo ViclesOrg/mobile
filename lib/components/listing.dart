@@ -79,24 +79,60 @@ class _MyListingPageState extends State<MyListingPage> {
           onTap: () {
             showModalBottomSheet(
               backgroundColor: Colors.white,
-              context: context,
-              builder: (context) => Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      'Dètails de la voiture',
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontFamily: "Montserrat",
-                        fontStyle: FontStyle.italic,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    )
-                  ],
+              isScrollControlled: true, // For a larger popup
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.vertical(
+                  top: Radius.circular(16),
                 ),
+              ),
+              constraints:
+                  BoxConstraints(minWidth: MediaQuery.of(context).size.width),
+              context: context,
+              builder: (context) => Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  ClipRRect(
+                    borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(16.0),
+                      topRight: Radius.circular(16.0),
+                    ),
+                    child: Image.network(
+                      car["cover"],
+                      // width: 120,
+                      // height: 120,
+                      // fit: BoxFit.cover,
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.all(16),
+                    child: Column(
+                      children: [
+                        Row(
+                          children: [
+                            Text(
+                              '${car["cbrand"]} ',
+                              style: const TextStyle(
+                                fontSize: 16,
+                                fontFamily: "Montserrat",
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                            Text(
+                              '${car["cmodel"]}',
+                              style: const TextStyle(
+                                fontSize: 16,
+                                fontFamily: "Montserrat",
+                                fontStyle: FontStyle.italic,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            )
+                          ],
+                        ),
+                      ],
+                    ),
+                  )
+                ],
               ),
             );
           },
