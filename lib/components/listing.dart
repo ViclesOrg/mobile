@@ -52,12 +52,15 @@ class _MyListingPageState extends State<MyListingPage> {
 
   List<Widget> carsFactory(List<dynamic> cars) {
     List<Widget> widgets = [
-      Text(
-        'Voitures disponibles',
-        style: const TextStyle(
-          fontSize: 20,
-          fontFamily: "Montserrat",
-          fontWeight: FontWeight.w700,
+      Padding(
+        padding: const EdgeInsets.fromLTRB(8, 16, 0, 16),
+        child: Text(
+          'Voitures disponibles',
+          style: const TextStyle(
+            fontSize: 20,
+            fontFamily: "Montserrat",
+            fontWeight: FontWeight.w700,
+          ),
         ),
       ),
     ];
@@ -72,90 +75,132 @@ class _MyListingPageState extends State<MyListingPage> {
           ),
         ),
         elevation: 3,
-        child: SizedBox(
-          height: 100, // Match the image height
-          child: Row(
-            children: [
-              // Image on the left
-              ClipRRect(
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(8.0),
-                  bottomLeft: Radius.circular(8.0),
-                ),
-                child: Image.network(
-                  car["cover"],
-                  width: 100,
-                  height: 100,
-                  fit: BoxFit.cover,
+        child: InkWell(
+          onTap: () {
+            showModalBottomSheet(
+              backgroundColor: Colors.white,
+              context: context,
+              builder: (context) => Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      'Dètails de la voiture',
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontFamily: "Montserrat",
+                        fontStyle: FontStyle.italic,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    )
+                  ],
                 ),
               ),
-              // Details on the right
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Row(
-                        children: [
-                          Text(
-                            '${car["cbrand"]} ',
-                            style: const TextStyle(
-                              fontSize: 18,
-                              fontFamily: "Montserrat",
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ),
-                          Text(
-                            '${car["cmodel"]}',
-                            style: const TextStyle(
-                              fontSize: 16,
-                              fontFamily: "Montserrat",
-                              fontStyle: FontStyle.italic,
-                              fontWeight: FontWeight.w400,
-                            ),
-                          )
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          RemixIcon(
-                            icon: 0xEF65,
-                            color: Colors.grey,
-                          ),
-                          Text(
-                            ' ${car["price"]} DH/Jour',
-                            style: const TextStyle(
-                                fontSize: 14,
-                                fontFamily: "Montserrat",
-                                fontWeight: FontWeight.w400,
-                                color: Colors.grey),
-                          )
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          RemixIcon(
-                            icon: 0xEF0A,
-                            color: Colors.grey,
-                          ),
-                          Text(
-                            locale: Locale('fr', 'FR'),
-                            ' ${utf8.decode(car["city"].toString().codeUnits)}',
-                            style: const TextStyle(
-                                fontSize: 14,
-                                fontFamily: "Montserrat",
-                                fontWeight: FontWeight.w400,
-                                color: Colors.grey),
-                          )
-                        ],
-                      )
-                    ],
+            );
+          },
+          child: SizedBox(
+            height: 100, // Match the image height
+            child: Row(
+              children: [
+                // Image on the left
+                ClipRRect(
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(8.0),
+                    bottomLeft: Radius.circular(8.0),
+                  ),
+                  child: Image.network(
+                    car["cover"],
+                    width: 120,
+                    height: 120,
+                    fit: BoxFit.cover,
                   ),
                 ),
-              ),
-            ],
+                // Details on the right
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Row(
+                          children: [
+                            Text(
+                              '${car["cbrand"]} ',
+                              style: const TextStyle(
+                                fontSize: 16,
+                                fontFamily: "Montserrat",
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                            Text(
+                              '${car["cmodel"]}',
+                              style: const TextStyle(
+                                fontSize: 16,
+                                fontFamily: "Montserrat",
+                                fontStyle: FontStyle.italic,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            )
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            RemixIcon(
+                              icon: 0xEB0F,
+                              color: Colors.grey,
+                            ),
+                            Text(
+                              ' ${car["owner"]}',
+                              style: const TextStyle(
+                                  fontSize: 14,
+                                  fontFamily: "Montserrat",
+                                  fontWeight: FontWeight.w400,
+                                  color: Colors.grey),
+                            )
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            RemixIcon(
+                              icon: 0xEF65,
+                              color: Colors.grey,
+                            ),
+                            Text(
+                              ' ${car["price"]} DH/Jour',
+                              style: const TextStyle(
+                                  fontSize: 14,
+                                  fontFamily: "Montserrat",
+                                  fontWeight: FontWeight.w400,
+                                  color: Colors.grey),
+                            )
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            RemixIcon(
+                              icon: 0xEF0A,
+                              color: Colors.grey,
+                            ),
+                            Text(
+                              locale: Locale('fr', 'FR'),
+                              ' ${utf8.decode(car["city"].toString().codeUnits)}',
+                              style: const TextStyle(
+                                  fontSize: 14,
+                                  fontFamily: "Montserrat",
+                                  fontWeight: FontWeight.w400,
+                                  color: Colors.grey),
+                            )
+                          ],
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       );
