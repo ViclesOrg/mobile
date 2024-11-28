@@ -92,7 +92,12 @@ flutter:
           weight: 400
     - family: Montserrat
       fonts:
-        - asset: fonts/Montserrat/Montserrat-VariableFont_wght.ttf
+        - asset: fonts/Montserrat/static/Montserrat-Regular.ttf
+          weight: 400
+        - asset: fonts/Montserrat/static/Montserrat-Italic.ttf
+          style: italic
+        - asset: fonts/Montserrat/static/Montserrat-Bold.ttf
+          weight: 700
     - family: Remix
       fonts:
         - asset: fonts/Remix/remixicon.ttf

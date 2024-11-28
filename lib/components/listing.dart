@@ -2,6 +2,9 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:vicles/api_service.dart';
 import 'package:vicles/preferences_helper.dart';
+import 'package:vicles/remix_icon.dart';
+
+const String utf8Encoding = 'UTF-8';
 
 class MyListingPage extends StatefulWidget {
   const MyListingPage({super.key});
@@ -48,7 +51,16 @@ class _MyListingPageState extends State<MyListingPage> {
   }
 
   List<Widget> carsFactory(List<dynamic> cars) {
-    List<Widget> widgets = [];
+    List<Widget> widgets = [
+      Text(
+        'Voitures disponibles',
+        style: const TextStyle(
+          fontSize: 20,
+          fontFamily: "Montserrat",
+          fontWeight: FontWeight.w700,
+        ),
+      ),
+    ];
     for (var car in cars) {
       Card card = Card(
         color: Colors.white,
@@ -85,14 +97,60 @@ class _MyListingPageState extends State<MyListingPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(
-                        '${car["cbrand"]} ${car["cmodel"]}',
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontFamily: "Montserrat",
-                          fontWeight: FontWeight.bold,
-                        ),
+                      Row(
+                        children: [
+                          Text(
+                            '${car["cbrand"]} ',
+                            style: const TextStyle(
+                              fontSize: 18,
+                              fontFamily: "Montserrat",
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                          Text(
+                            '${car["cmodel"]}',
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontFamily: "Montserrat",
+                              fontStyle: FontStyle.italic,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          )
+                        ],
                       ),
+                      Row(
+                        children: [
+                          RemixIcon(
+                            icon: 0xEF65,
+                            color: Colors.grey,
+                          ),
+                          Text(
+                            ' ${car["price"]} DH/Jour',
+                            style: const TextStyle(
+                                fontSize: 14,
+                                fontFamily: "Montserrat",
+                                fontWeight: FontWeight.w400,
+                                color: Colors.grey),
+                          )
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          RemixIcon(
+                            icon: 0xEF0A,
+                            color: Colors.grey,
+                          ),
+                          Text(
+                            locale: Locale('fr', 'FR'),
+                            ' ${utf8.decode(car["city"].toString().codeUnits)}',
+                            style: const TextStyle(
+                                fontSize: 14,
+                                fontFamily: "Montserrat",
+                                fontWeight: FontWeight.w400,
+                                color: Colors.grey),
+                          )
+                        ],
+                      )
                     ],
                   ),
                 ),
@@ -140,7 +198,7 @@ class _MyListingPageState extends State<MyListingPage> {
         backgroundColor: Colors.white,
         body: Center(
           child: Padding(
-            padding: const EdgeInsets.all(15.0),
+            padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
             child: handleLoading(),
           ),
         ));
