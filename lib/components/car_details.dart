@@ -260,7 +260,9 @@ Future<dynamic> carDatils(BuildContext context, dynamic car) {
         ),
       ),
       constraints: BoxConstraints(
-          minWidth: MediaQuery.of(context).size.width, minHeight: 300),
+          minWidth: MediaQuery.of(context).size.width,
+          minHeight: 300,
+          maxHeight: MediaQuery.of(context).size.height * 0.75),
       context: context,
       builder: (context) => CarDetails(
             car: car,
