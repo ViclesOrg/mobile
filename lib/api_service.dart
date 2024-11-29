@@ -7,8 +7,8 @@ class ApiService {
   // GET Request with query parameters
   static Future<dynamic> get(
     String endpoint,
-    Map<String, String>? map, {
-    Map<String, String>? queryParams,
+    Map<String, dynamic>? map, {
+    Map<String, dynamic>? queryParams,
   }) async {
     try {
       // Create URI with query parameters
@@ -34,7 +34,8 @@ class ApiService {
   }
 
   // POST Request with FormData
-  static Future<dynamic> post(String endpoint, Map<String, String> body) async {
+  static Future<dynamic> post(
+      String endpoint, Map<String, dynamic> body) async {
     try {
       var request =
           http.MultipartRequest('POST', Uri.parse('$baseUrl/$endpoint'));

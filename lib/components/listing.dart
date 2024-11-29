@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:vicles/api_service.dart';
+import 'package:vicles/components/car_details.dart';
 import 'package:vicles/preferences_helper.dart';
 import 'package:vicles/remix_icon.dart';
 
@@ -30,7 +31,7 @@ class _MyListingPageState extends State<MyListingPage> {
       }
     });
   }
-
+ 
   @override
   void initState() {
     super.initState();
@@ -77,64 +78,7 @@ class _MyListingPageState extends State<MyListingPage> {
         elevation: 3,
         child: InkWell(
           onTap: () {
-            showModalBottomSheet(
-              backgroundColor: Colors.white,
-              isScrollControlled: true, // For a larger popup
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.vertical(
-                  top: Radius.circular(16),
-                ),
-              ),
-              constraints:
-                  BoxConstraints(minWidth: MediaQuery.of(context).size.width),
-              context: context,
-              builder: (context) => Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  ClipRRect(
-                    borderRadius: const BorderRadius.only(
-                      topLeft: Radius.circular(16.0),
-                      topRight: Radius.circular(16.0),
-                    ),
-                    child: Image.network(
-                      car["cover"],
-                      // width: 120,
-                      // height: 120,
-                      // fit: BoxFit.cover,
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.all(16),
-                    child: Column(
-                      children: [
-                        Row(
-                          children: [
-                            Text(
-                              '${car["cbrand"]} ',
-                              style: const TextStyle(
-                                fontSize: 16,
-                                fontFamily: "Montserrat",
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
-                            Text(
-                              '${car["cmodel"]}',
-                              style: const TextStyle(
-                                fontSize: 16,
-                                fontFamily: "Montserrat",
-                                fontStyle: FontStyle.italic,
-                                fontWeight: FontWeight.w400,
-                              ),
-                            )
-                          ],
-                        ),
-                      ],
-                    ),
-                  )
-                ],
-              ),
-            );
+            carDatils(context, car);
           },
           child: SizedBox(
             height: 100, // Match the image height
@@ -230,7 +174,7 @@ class _MyListingPageState extends State<MyListingPage> {
                                   color: Colors.grey),
                             )
                           ],
-                        )
+                        ),
                       ],
                     ),
                   ),
