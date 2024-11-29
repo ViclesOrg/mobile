@@ -13,10 +13,14 @@ class CarDetails extends StatefulWidget {
 class _CarDetailsState extends State<CarDetails> {
   bool _isCarLoding = true;
   List<dynamic> _dates = [];
+  List<dynamic> _images = [];
+  int _currentIndex = 0;
+
   @override
   void initState() {
     super.initState();
     loadCarAvailabilityDates(int.parse(widget._car['id']));
+    loadCarImages(int.parse(widget._car['id']));
   }
 
   @override
@@ -30,14 +34,26 @@ class _CarDetailsState extends State<CarDetails> {
       final dates = await ApiService.post("renters/rentalDates", {
         "id": id,
       });
-      print("REQUEST SENT");
       if (dates != null && dates['error']['code'] == 0) {
+        _dates = dates['dates'];
+      }
+    } catch (e) {
+      setState(() {
+        _isCarLoding = false;
+      });
+    }
+  }
+
+  Future<dynamic> loadCarImages(int id) async {
+    try {
+      final images = await ApiService.post("renters/CarImages", {
+        "id": id,
+      });
+      if (images != null && images['error']['code'] == 0) {
         setState(() {
           _isCarLoding = false;
         });
-        _dates = dates['dates'];
-        print(dates);
-        print(_dates);
+        _images = images['links'];
       }
     } catch (e) {
       setState(() {
@@ -60,6 +76,7 @@ class _CarDetailsState extends State<CarDetails> {
         ),
       );
     }
+    _images.add({'link': car["cover"], 'car': car["id"]});
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -68,8 +85,17 @@ class _CarDetailsState extends State<CarDetails> {
             topLeft: Radius.circular(16.0),
             topRight: Radius.circular(16.0),
           ),
-          child: Image.network(
-            car["cover"],
+          child: SizedBox(
+            height: 300.0, // Specify the desired height
+            child: PageView.builder(
+              itemCount: _images.length,
+              itemBuilder: (context, index) {
+                return Image.network(
+                  _images[index]['link'],
+                  fit: BoxFit.cover,
+                );
+              },
+            ),
           ),
         ),
         Padding(
