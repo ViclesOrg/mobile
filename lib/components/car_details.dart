@@ -291,9 +291,9 @@ class _CarDetailsState extends State<CarDetails> {
                       selectableDayPredicate: (DateTime date) {
                         for (var range in _dates) {
                           if (date.isAfter(DateTime.parse(range['start_date'])
-                                  .subtract(const Duration(days: 1))) &&
+                                  .subtract(const Duration(days: 2))) &&
                               date.isBefore(DateTime.parse(range['end_date'])
-                                  .add(const Duration(days: 1)))) {
+                                  .add(const Duration(days: 0)))) {
                             return false;
                           }
                         }
