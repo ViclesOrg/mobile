@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:vicles/api_service.dart';
 import 'package:vicles/remix_icon.dart';
+import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
 class CarDetails extends StatefulWidget {
   final dynamic _car;
@@ -76,175 +77,241 @@ class _CarDetailsState extends State<CarDetails> {
         ),
       );
     }
-    _images.add({'link': car["cover"], 'car': car["id"]});
-    return Column(
-      mainAxisSize: MainAxisSize.min,
+    _images.insert(0, {'link': car["cover"], 'car': car["id"]});
+    return ListView(
       children: [
-        ClipRRect(
-          borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(16.0),
-            topRight: Radius.circular(16.0),
-          ),
-          child: SizedBox(
-            height: 300.0, // Specify the desired height
-            child: PageView.builder(
-              itemCount: _images.length,
-              itemBuilder: (context, index) {
-                return Image.network(
-                  _images[index]['link'],
-                  fit: BoxFit.cover,
-                );
-              },
+        Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ClipRRect(
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(16.0),
+                topRight: Radius.circular(16.0),
+              ),
+              child: SizedBox(
+                height: 300.0, // Specify the desired height
+                child: PageView.builder(
+                  itemCount: _images.length,
+                  itemBuilder: (context, index) {
+                    return Image.network(
+                      _images[index]['link'],
+                      fit: BoxFit.cover,
+                    );
+                  },
+                ),
+              ),
             ),
-          ),
-        ),
-        Padding(
-          padding: EdgeInsets.all(16),
-          child: Column(
-            children: [
-              // Keep the first row as it is
-              Row(
+            Padding(
+              padding: EdgeInsets.all(16),
+              child: Column(
                 children: [
+                  // Keep the first row as it is
+                  Row(
+                    children: [
+                      Text(
+                        '${car["cbrand"]} ',
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontFamily: "Montserrat",
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      Text(
+                        '${car["cmodel"]}',
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontFamily: "Montserrat",
+                          fontStyle: FontStyle.italic,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                    ],
+                  ),
+                  // Use GridView for the remaining rows
+                  GridView(
+                    shrinkWrap:
+                        true, // Important to avoid infinite height error
+                    physics:
+                        NeverScrollableScrollPhysics(), // Prevent scrolling within the modal
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2, // Two columns
+                      crossAxisSpacing: 2.0,
+                      mainAxisSpacing: 2.0,
+                      childAspectRatio: 4, // Adjust based on design
+                    ),
+                    children: [
+                      Row(
+                        children: [
+                          RemixIcon(
+                            icon: 0xEB0F,
+                            color: Colors.grey,
+                          ),
+                          Text(
+                            ' ${car["owner"]}',
+                            style: const TextStyle(
+                              fontSize: 14,
+                              fontFamily: "Montserrat",
+                              fontWeight: FontWeight.w400,
+                              color: Colors.grey,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          RemixIcon(
+                            icon: 0xEF0A,
+                            color: Colors.grey,
+                          ),
+                          Text(
+                            locale: Locale('fr', 'FR'),
+                            ' ${utf8.decode(car["city"].toString().codeUnits)}',
+                            style: const TextStyle(
+                              fontSize: 14,
+                              fontFamily: "Montserrat",
+                              fontWeight: FontWeight.w400,
+                              color: Colors.grey,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          RemixIcon(
+                            icon: 0xEF65,
+                            color: Colors.grey,
+                          ),
+                          Text(
+                            locale: Locale('fr', 'FR'),
+                            ' ${car['price']} DH/Jours',
+                            style: const TextStyle(
+                              fontSize: 14,
+                              fontFamily: "Montserrat",
+                              fontWeight: FontWeight.w400,
+                              color: Colors.grey,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          RemixIcon(
+                            icon: 0xEEE0,
+                            color: Colors.grey,
+                          ),
+                          Text(
+                            ' ${car["trunksize"]} Litres',
+                            style: const TextStyle(
+                              fontSize: 14,
+                              fontFamily: "Montserrat",
+                              fontWeight: FontWeight.w400,
+                              color: Colors.grey,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          RemixIcon(
+                            icon: 0xF3EB,
+                            color: Colors.grey,
+                          ),
+                          Text(
+                            ' ${car["seats"]} Places',
+                            style: const TextStyle(
+                              fontSize: 14,
+                              fontFamily: "Montserrat",
+                              fontWeight: FontWeight.w400,
+                              color: Colors.grey,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          RemixIcon(
+                            icon: 0xF326,
+                            color: Colors.grey,
+                          ),
+                          Text(
+                            ' ${car["gear"]}',
+                            style: const TextStyle(
+                              fontSize: 14,
+                              fontFamily: "Montserrat",
+                              fontWeight: FontWeight.w400,
+                              color: Colors.grey,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  // ADD DATE RANGE PICKER HERE
+                  SizedBox(height: 20),
                   Text(
-                    '${car["cbrand"]} ',
-                    style: const TextStyle(
+                    textAlign: TextAlign.start,
+                    "Sélectionnez la période de location",
+                    style: TextStyle(
                       fontSize: 16,
                       fontFamily: "Montserrat",
                       fontWeight: FontWeight.w700,
                     ),
                   ),
-                  Text(
-                    '${car["cmodel"]}',
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontFamily: "Montserrat",
-                      fontStyle: FontStyle.italic,
-                      fontWeight: FontWeight.w400,
+                  Container(
+                    decoration: BoxDecoration(
+                      // borderRadius: BorderRadius.all(Radius.circular(32)),
+                      border: Border.all(color: Colors.grey, width: .2),
                     ),
-                  ),
+                    child: SfDateRangePicker(
+                      backgroundColor: Colors.white,
+                      view: DateRangePickerView.month,
+                      selectionMode: DateRangePickerSelectionMode.range,
+                      startRangeSelectionColor:
+                          Color.fromARGB(255, 253, 111, 0),
+                      monthViewSettings: DateRangePickerMonthViewSettings(
+                        viewHeaderStyle: DateRangePickerViewHeaderStyle(
+                          backgroundColor: Colors.white,
+                          textStyle: TextStyle(
+                            fontSize: 10,
+                            fontFamily: "Montserrat",
+                            fontStyle: FontStyle.italic,
+                            color: Colors.black,
+                          ),
+                        ),
+                        showTrailingAndLeadingDates: true,
+                      ),
+                      headerStyle: DateRangePickerHeaderStyle(
+                          backgroundColor: Colors.white,
+                          textStyle: TextStyle(
+                            fontSize: 14,
+                            fontFamily: "Montserrat",
+                            color: Colors.black,
+                          )),
+                      // Determine which dates should be disabled
+                      selectableDayPredicate: (DateTime date) {
+                        for (var range in _dates) {
+                          if (date.isAfter(DateTime.parse(range['start_date'])
+                                  .subtract(const Duration(days: 1))) &&
+                              date.isBefore(DateTime.parse(range['end_date'])
+                                  .add(const Duration(days: 1)))) {
+                            return false;
+                          }
+                        }
+                        return true;
+                      },
+                      // Customize the appearance
+                      selectionColor: Color.fromARGB(255, 253, 111, 0),
+                      endRangeSelectionColor: Color.fromARGB(255, 253, 111, 0),
+                      rangeSelectionColor:
+                          Color.fromARGB(255, 253, 111, 0).withOpacity(0.1),
+                      todayHighlightColor: Color.fromARGB(255, 253, 111, 0),
+                    ),
+                  )
                 ],
               ),
-              // Use GridView for the remaining rows
-              GridView(
-                shrinkWrap: true, // Important to avoid infinite height error
-                physics:
-                    NeverScrollableScrollPhysics(), // Prevent scrolling within the modal
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2, // Two columns
-                  crossAxisSpacing: 2.0,
-                  mainAxisSpacing: 2.0,
-                  childAspectRatio: 4, // Adjust based on design
-                ),
-                children: [
-                  Row(
-                    children: [
-                      RemixIcon(
-                        icon: 0xEB0F,
-                        color: Colors.grey,
-                      ),
-                      Text(
-                        ' ${car["owner"]}',
-                        style: const TextStyle(
-                          fontSize: 14,
-                          fontFamily: "Montserrat",
-                          fontWeight: FontWeight.w400,
-                          color: Colors.grey,
-                        ),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      RemixIcon(
-                        icon: 0xEF0A,
-                        color: Colors.grey,
-                      ),
-                      Text(
-                        locale: Locale('fr', 'FR'),
-                        ' ${utf8.decode(car["city"].toString().codeUnits)}',
-                        style: const TextStyle(
-                          fontSize: 14,
-                          fontFamily: "Montserrat",
-                          fontWeight: FontWeight.w400,
-                          color: Colors.grey,
-                        ),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      RemixIcon(
-                        icon: 0xEF65,
-                        color: Colors.grey,
-                      ),
-                      Text(
-                        locale: Locale('fr', 'FR'),
-                        ' ${car['price']} DH/Jours',
-                        style: const TextStyle(
-                          fontSize: 14,
-                          fontFamily: "Montserrat",
-                          fontWeight: FontWeight.w400,
-                          color: Colors.grey,
-                        ),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      RemixIcon(
-                        icon: 0xEEE0,
-                        color: Colors.grey,
-                      ),
-                      Text(
-                        ' ${car["trunksize"]} Litres',
-                        style: const TextStyle(
-                          fontSize: 14,
-                          fontFamily: "Montserrat",
-                          fontWeight: FontWeight.w400,
-                          color: Colors.grey,
-                        ),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      RemixIcon(
-                        icon: 0xF3EB,
-                        color: Colors.grey,
-                      ),
-                      Text(
-                        ' ${car["seats"]} Places',
-                        style: const TextStyle(
-                          fontSize: 14,
-                          fontFamily: "Montserrat",
-                          fontWeight: FontWeight.w400,
-                          color: Colors.grey,
-                        ),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      RemixIcon(
-                        icon: 0xF326,
-                        color: Colors.grey,
-                      ),
-                      Text(
-                        ' ${car["gear"]}',
-                        style: const TextStyle(
-                          fontSize: 14,
-                          fontFamily: "Montserrat",
-                          fontWeight: FontWeight.w400,
-                          color: Colors.grey,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
+            ),
+          ],
+        )
       ],
     );
   }
@@ -252,6 +319,7 @@ class _CarDetailsState extends State<CarDetails> {
 
 Future<dynamic> carDatils(BuildContext context, dynamic car) {
   return showModalBottomSheet(
+      clipBehavior: Clip.hardEdge,
       backgroundColor: Colors.white,
       isScrollControlled: true, // For a larger popup
       shape: RoundedRectangleBorder(

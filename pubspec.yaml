@@ -39,6 +39,7 @@ dependencies:
   flutter_secure_storage: ^9.2.2
   device_info_plus: ^11.1.1
   package_info_plus: ^8.1.1
+  syncfusion_flutter_datepicker: ^27.2.4
   crypto: ^3.0.3
 
 dev_dependencies:
