@@ -15,7 +15,7 @@ class _CarDetailsState extends State<CarDetails> {
   bool _isCarLoding = true;
   List<dynamic> _dates = [];
   List<dynamic> _images = [];
-  int _currentIndex = 0;
+  PickerDateRange _selectedDateRange = PickerDateRange(null, null);
 
   @override
   void initState() {
@@ -299,6 +299,14 @@ class _CarDetailsState extends State<CarDetails> {
                         }
                         return true;
                       },
+                      onSelectionChanged:
+                          (DateRangePickerSelectionChangedArgs args) async {
+                        if (args.value is PickerDateRange) {
+                          setState(() {
+                            _selectedDateRange = args.value as PickerDateRange;
+                          });
+                        }
+                      },
                       // Customize the appearance
                       selectionColor: Color.fromARGB(255, 253, 111, 0),
                       endRangeSelectionColor: Color.fromARGB(255, 253, 111, 0),
@@ -306,7 +314,45 @@ class _CarDetailsState extends State<CarDetails> {
                           Color.fromARGB(255, 253, 111, 0).withOpacity(0.1),
                       todayHighlightColor: Color.fromARGB(255, 253, 111, 0),
                     ),
-                  )
+                  ),
+                  SizedBox(height: 20),
+                  TextButton(
+                    onPressed: () {
+                      DateTime? startDate = _selectedDateRange.startDate;
+                      DateTime? endDate = _selectedDateRange.endDate;
+                      if (startDate != null && endDate != null) {
+                        print(_selectedDateRange);
+                      } else {
+                        SnackBar(
+                          content: Text(
+                            "Sélectionez une plage de dates",
+                            style: const TextStyle(
+                              fontFamily: 'Montserrat',
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          backgroundColor: Colors.red,
+                          duration: const Duration(seconds: 3),
+                        );
+                      }
+                    },
+                    style: TextButton.styleFrom(
+                      foregroundColor: Colors.white,
+                      backgroundColor: Color.fromARGB(255, 253, 111, 0),
+                      padding: EdgeInsets.all(16),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                    ),
+                    child: Text(
+                      "Réserver",
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontFamily: "Montserrat",
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -319,20 +365,21 @@ class _CarDetailsState extends State<CarDetails> {
 
 Future<dynamic> carDatils(BuildContext context, dynamic car) {
   return showModalBottomSheet(
-      clipBehavior: Clip.hardEdge,
-      backgroundColor: Colors.white,
-      isScrollControlled: true, // For a larger popup
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(
-          top: Radius.circular(16),
-        ),
+    clipBehavior: Clip.hardEdge,
+    backgroundColor: Colors.white,
+    isScrollControlled: true, // For a larger popup
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.vertical(
+        top: Radius.circular(16),
       ),
-      constraints: BoxConstraints(
-          minWidth: MediaQuery.of(context).size.width,
-          minHeight: 300,
-          maxHeight: MediaQuery.of(context).size.height * 0.75),
-      context: context,
-      builder: (context) => CarDetails(
-            car: car,
-          ));
+    ),
+    constraints: BoxConstraints(
+        minWidth: MediaQuery.of(context).size.width,
+        minHeight: 300,
+        maxHeight: MediaQuery.of(context).size.height * 0.75),
+    context: context,
+    builder: (context) => CarDetails(
+      car: car,
+    ),
+  );
 }
