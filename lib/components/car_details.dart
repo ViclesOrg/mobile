@@ -63,6 +63,51 @@ class _CarDetailsState extends State<CarDetails> {
     }
   }
 
+  void showCustomSnackBar(BuildContext context, String message) {
+    // Remove any existing overlays first to prevent stacking
+    OverlayState? overlayState = Overlay.of(context);
+    OverlayEntry? overlayEntry;
+
+    overlayEntry = OverlayEntry(
+      builder: (context) => Positioned(
+        // Position at the bottom of the screen
+        bottom: MediaQuery.of(context).viewInsets.bottom + 16,
+        // Center horizontally and add padding
+        left: 16,
+        right: 16,
+        child: Material(
+          color: Colors.transparent,
+          child: SafeArea(
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.red,
+                borderRadius: BorderRadius.circular(4),
+              ),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 16,
+                vertical: 12,
+              ),
+              child: Text(
+                message,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontFamily: 'Montserrat',
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+
+    // Show the overlay and remove it after duration
+    overlayState?.insert(overlayEntry);
+    Future.delayed(const Duration(seconds: 3), () {
+      overlayEntry?.remove();
+    });
+  }
+
   Widget handleState(dynamic car) {
     if (_isCarLoding) {
       return Container(
@@ -316,6 +361,8 @@ class _CarDetailsState extends State<CarDetails> {
                     ),
                   ),
                   SizedBox(height: 20),
+                  // PUT HERE A TIME PICKER WIDGET
+                  SizedBox(height: 20),
                   TextButton(
                     onPressed: () {
                       DateTime? startDate = _selectedDateRange.startDate;
@@ -323,16 +370,9 @@ class _CarDetailsState extends State<CarDetails> {
                       if (startDate != null && endDate != null) {
                         print(_selectedDateRange);
                       } else {
-                        SnackBar(
-                          content: Text(
-                            "Sélectionez une plage de dates",
-                            style: const TextStyle(
-                              fontFamily: 'Montserrat',
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          backgroundColor: Colors.red,
-                          duration: const Duration(seconds: 3),
+                        showCustomSnackBar(
+                          context,
+                          "Sélectionez une plage de dates",
                         );
                       }
                     },
