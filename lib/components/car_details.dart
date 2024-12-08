@@ -52,6 +52,9 @@ class _CarDetailsState extends State<CarDetails> {
       if (dates != null && dates['error']['code'] == 0) {
         _dates = dates['dates'];
       }
+      setState(() {
+        _isCarLoding = false;
+      });
     } catch (e) {
       setState(() {
         _isCarLoding = false;
@@ -470,9 +473,10 @@ Future<dynamic> carDatils(BuildContext context, dynamic car) {
       ),
     ),
     constraints: BoxConstraints(
-        minWidth: MediaQuery.of(context).size.width,
-        minHeight: 300,
-        maxHeight: MediaQuery.of(context).size.height * 0.75),
+      minWidth: MediaQuery.of(context).size.width,
+      minHeight: 300,
+      maxHeight: MediaQuery.of(context).size.height * 0.75,
+    ),
     context: context,
     builder: (context) => CarDetails(
       car: car,

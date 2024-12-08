@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:vicles/api_service.dart';
+import 'package:vicles/components/filter_cities.dart';
 import 'package:vicles/components/listing.dart';
 import 'package:vicles/components/notifs.dart';
 import 'package:vicles/components/profile.dart';
@@ -18,8 +19,8 @@ class _MyHomePageState extends State<MyHomePage> {
   String? _retrievedUser;
   String? _user;
   String? _id;
+  dynamic selectedCity;
   List<dynamic> _cities = [];
-  bool _citiesLoad = true;
   int currentPageIndex = 0;
 
   Future<void> _retrieveUser() async {
@@ -39,19 +40,6 @@ class _MyHomePageState extends State<MyHomePage> {
     _retrieveUser();
   }
 
-  Future<dynamic> getCities() async {
-    try {
-      final cities = await ApiService.post("renters/cities", {});
-      if (cities != null && cities['error']['code'] == 0) {
-        _cities = cities['cities'];
-      }
-    } catch (e) {
-      setState(() {
-        _citiesLoad = false;
-      });
-    }
-  }
-
   List<Widget> _conditionalRender() {
     if (currentPageIndex == 0) {
       return [
@@ -63,40 +51,26 @@ class _MyHomePageState extends State<MyHomePage> {
             )),
         Spacer(flex: 18),
         TextButton(
-            onPressed: () {
-              getCities();
-              showDialog(
-                  context: context,
-                  builder: (context) {
-                    if (_citiesLoad == true) {
-                      Container(
-                        color: Colors.white,
-                        child: const Center(
-                          child: CircularProgressIndicator(
-                            color: Color.fromARGB(255, 253, 111, 0),
-                          ),
-                        ),
-                      );
-                    }
-                    return AlertDialog(
-                      surfaceTintColor: Colors.white,
-                      backgroundColor: Colors.white,
-                      title: Text(
-                        "Filtre des villes",
-                        style: TextStyle(
-                          fontFamily: 'Montserrat',
-                          fontWeight: FontWeight.w700,
-                          fontSize: 18,
-                        ),
-                      ),
-                      content: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [],
-                      ),
-                    );
-                  });
-            },
-            child: RemixIcon(icon: 0xEF0A, size: 24)),
+          onPressed: () async {
+            showModalBottomSheet(
+                clipBehavior: Clip.hardEdge,
+                backgroundColor: Colors.white,
+                isScrollControlled: true, // For a larger popup
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.vertical(
+                    top: Radius.circular(16),
+                  ),
+                ),
+                constraints: BoxConstraints(
+                  minWidth: MediaQuery.of(context).size.width,
+                  minHeight: 300,
+                  maxHeight: 300,
+                ),
+                context: context,
+                builder: (context) => FilterCities(seletedCity));
+          },
+          child: RemixIcon(icon: 0xEF0A, size: 24),
+        ),
         TextButton(
             onPressed: () {
               print("Filter");
