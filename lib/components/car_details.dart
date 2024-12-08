@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:vicles/api_service.dart';
+import 'package:vicles/preferences_helper.dart';
 import 'package:vicles/remix_icon.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
@@ -16,10 +17,23 @@ class _CarDetailsState extends State<CarDetails> {
   List<dynamic> _dates = [];
   List<dynamic> _images = [];
   PickerDateRange _selectedDateRange = PickerDateRange(null, null);
+  int _user = 0;
+
+  Future<void> _retriveUser() async {
+    String tmp = '';
+    String? token = await getValue("user");
+    setState(() {
+      tmp = token ?? "No token found!";
+      if (tmp != "No token found!") {
+        _user = int.parse(jsonDecode(tmp.toString())['user']['id'].toString());
+      }
+    });
+  }
 
   @override
   void initState() {
     super.initState();
+    _retriveUser();
     loadCarAvailabilityDates(int.parse(widget._car['id']));
     loadCarImages(int.parse(widget._car['id']));
   }
@@ -336,9 +350,9 @@ class _CarDetailsState extends State<CarDetails> {
                       selectableDayPredicate: (DateTime date) {
                         for (var range in _dates) {
                           if (date.isAfter(DateTime.parse(range['start_date'])
-                                  .subtract(const Duration(days: 2))) &&
+                                  .subtract(const Duration(days: 1))) &&
                               date.isBefore(DateTime.parse(range['end_date'])
-                                  .add(const Duration(days: 0)))) {
+                                  .add(const Duration(days: 1)))) {
                             return false;
                           }
                         }
@@ -364,11 +378,53 @@ class _CarDetailsState extends State<CarDetails> {
                   // PUT HERE A TIME PICKER WIDGET
                   SizedBox(height: 20),
                   TextButton(
-                    onPressed: () {
+                    onPressed: () async {
                       DateTime? startDate = _selectedDateRange.startDate;
                       DateTime? endDate = _selectedDateRange.endDate;
                       if (startDate != null && endDate != null) {
-                        print(_selectedDateRange);
+                        try {
+                          showDialog(
+                            context: context,
+                            barrierDismissible: false,
+                            builder: (BuildContext context) {
+                              return const Center(
+                                child: CircularProgressIndicator(
+                                  color: Color.fromARGB(255, 253, 111, 0),
+                                  backgroundColor: Colors.white,
+                                ),
+                              );
+                            },
+                          );
+
+                          final rentResponse =
+                              await ApiService.post('renters/rentCar', {
+                            "car": car['id'],
+                            "renter": _user,
+                            "start": startDate.toString(),
+                            "end": endDate.toString(),
+                          });
+                          if (rentResponse['code'] == 0) {
+                            Navigator.pop(context);
+                            Navigator.pop(context);
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                  'Réservation réussie',
+                                  style: const TextStyle(
+                                    fontFamily: 'Montserrat',
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                backgroundColor: Colors.green,
+                                duration: const Duration(seconds: 3),
+                              ),
+                            );
+                          } else {
+                            showCustomSnackBar(context, "Something went wrong");
+                          }
+                        } catch (e) {
+                          showCustomSnackBar(context, "Something went wrong");
+                        }
                       } else {
                         showCustomSnackBar(
                           context,

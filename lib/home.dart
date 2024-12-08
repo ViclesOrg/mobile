@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:vicles/api_service.dart';
 import 'package:vicles/components/listing.dart';
 import 'package:vicles/components/notifs.dart';
 import 'package:vicles/components/profile.dart';
@@ -17,6 +18,8 @@ class _MyHomePageState extends State<MyHomePage> {
   String? _retrievedUser;
   String? _user;
   String? _id;
+  List<dynamic> _cities = [];
+  bool _citiesLoad = true;
   int currentPageIndex = 0;
 
   Future<void> _retrieveUser() async {
@@ -36,6 +39,19 @@ class _MyHomePageState extends State<MyHomePage> {
     _retrieveUser();
   }
 
+  Future<dynamic> getCities() async {
+    try {
+      final cities = await ApiService.post("renters/cities", {});
+      if (cities != null && cities['error']['code'] == 0) {
+        _cities = cities['cities'];
+      }
+    } catch (e) {
+      setState(() {
+        _citiesLoad = false;
+      });
+    }
+  }
+
   List<Widget> _conditionalRender() {
     if (currentPageIndex == 0) {
       return [
@@ -48,7 +64,37 @@ class _MyHomePageState extends State<MyHomePage> {
         Spacer(flex: 18),
         TextButton(
             onPressed: () {
-              print("Location");
+              getCities();
+              showDialog(
+                  context: context,
+                  builder: (context) {
+                    if (_citiesLoad == true) {
+                      Container(
+                        color: Colors.white,
+                        child: const Center(
+                          child: CircularProgressIndicator(
+                            color: Color.fromARGB(255, 253, 111, 0),
+                          ),
+                        ),
+                      );
+                    }
+                    return AlertDialog(
+                      surfaceTintColor: Colors.white,
+                      backgroundColor: Colors.white,
+                      title: Text(
+                        "Filtre des villes",
+                        style: TextStyle(
+                          fontFamily: 'Montserrat',
+                          fontWeight: FontWeight.w700,
+                          fontSize: 18,
+                        ),
+                      ),
+                      content: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [],
+                      ),
+                    );
+                  });
             },
             child: RemixIcon(icon: 0xEF0A, size: 24)),
         TextButton(
@@ -59,18 +105,19 @@ class _MyHomePageState extends State<MyHomePage> {
       ];
     }
     return [
-      Text("Vicles",
-          style: TextStyle(
-            color: Color.fromARGB(255, 253, 111, 0),
-            fontFamily: "Righteous",
-            fontSize: 36,
-          )),
+      Text(
+        "Vicles",
+        style: TextStyle(
+          color: Color.fromARGB(255, 253, 111, 0),
+          fontFamily: "Righteous",
+          fontSize: 36,
+        ),
+      ),
     ];
   }
 
   @override
   Widget build(BuildContext context) {
-    _retrieveUser();
     return Scaffold(
       appBar: AppBar(
           backgroundColor: Colors.white,

@@ -31,7 +31,7 @@ class _MyListingPageState extends State<MyListingPage> {
       }
     });
   }
- 
+
   @override
   void initState() {
     super.initState();
@@ -43,11 +43,15 @@ class _MyListingPageState extends State<MyListingPage> {
     try {
       final cars = await ApiService.post("renters/allCars", {});
       if (cars != null && cars['error']['code'] == 0) {
-        _isLoading = false;
+        setState(() {
+          _isLoading = false;
+        });
         _cars = cars['cars'];
       }
     } catch (e) {
-      _isLoading = false;
+      setState(() {
+        _isLoading = false;
+      });
     }
   }
 

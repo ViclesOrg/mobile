@@ -108,9 +108,6 @@ class _LogsigbState extends State<Logsign> {
         }
       } catch (e) {
         // Hide loading indicator if still showing
-        print("################ VICLES DEBUGGER ################");
-        print(e.toString());
-        print("################ VICLES DEBUGGER ################");
         if (context.mounted && Navigator.canPop(context)) {
           Navigator.of(context).pop();
         }
